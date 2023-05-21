@@ -59,7 +59,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun detail(movie: MovieDomain) {
-        val data = arrayOf(movie.posterPath.original, movie.overview)
+        val data = arrayOf(movie.fullPosterPath, movie.overview)
         //todo: criar e redirecionar o data para tela de detalhes
 //        findNavController().navigate(MainFragmentDirections.actionMainFragmentToDownloadFragment(data))
     }

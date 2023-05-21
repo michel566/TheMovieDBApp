@@ -14,7 +14,6 @@ class GetPopularUseCaseImpl @Inject constructor(
 
     override fun createFlowObservable(params: GetPopularUseCase.GetPopularParams):
             Flow<PagingData<MovieDomain>> {
-        val pagingSource = repository.fetchPopular()
         return Pager(config = params.pagingConfig) {
             repository.fetchPopular()
         }.flow

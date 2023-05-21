@@ -8,7 +8,6 @@ interface TMDBApi {
 
     @GET("3/movie/popular")
     suspend fun getPopularMovies(
-        @Query("language") language: String,
         @Query("page") page: Int
     ): DataWrapperResponse
 

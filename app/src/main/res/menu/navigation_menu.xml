@@ -11,4 +11,20 @@
         android:icon="@drawable/ic_bookmark"
         android:title="@string/favorites"/>
 
+
+    <item
+        android:title="@string/settings">
+        <menu>
+            <item
+                android:id="@+id/menu_mode_light"
+                android:icon="@drawable/ic_wb_sunny"
+                android:title="@string/light_mode"/>
+
+            <item
+                android:id="@+id/menu_mode_dark"
+                android:icon="@drawable/ic_moon"
+                android:title="@string/dark_mode"/>
+        </menu>
+    </item>
+
 </menu>

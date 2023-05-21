@@ -7,60 +7,60 @@ import com.google.gson.annotations.SerializedName
 data class Movie(
 
     @SerializedName("adult")
-    val isAdult: Boolean,
+    val isAdult: Boolean?,
 
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
 
     @SerializedName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
 
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
 
     @SerializedName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
 
     @SerializedName("original_title")
-    val originalTitle: String,
+    val originalTitle: String?,
 
     @SerializedName("overview")
-    val overview: String,
+    val overview: String?,
 
     @SerializedName("popularity")
-    val popularity: Double,
+    val popularity: Double?,
 
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
 
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
 
     @SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("video")
-    val video: Boolean,
+    val video: Boolean?,
 
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?,
 
     @SerializedName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int?,
 
 )
 
 fun Movie.toMovieDomain(): MovieDomain =
     MovieDomain(
         isAdult = this.isAdult,
-        backdropPath = SrcDomainMapper.imagePathToSrcDomain(this.backdropPath),
+        backdropPath = this.backdropPath,
         genreIds = this.genreIds,
         id = this.id,
         originalLanguage = this.originalLanguage,
         originalTitle = this.originalTitle,
         overview = this.overview,
         popularity = this.popularity,
-        posterPath = SrcDomainMapper.imagePathToSrcDomain(this.posterPath),
+        posterPath = this.posterPath,
         releaseDate = this.releaseDate,
         title = this.title,
         video = this.video,

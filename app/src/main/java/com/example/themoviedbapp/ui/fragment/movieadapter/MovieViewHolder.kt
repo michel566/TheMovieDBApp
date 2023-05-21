@@ -18,7 +18,7 @@ class MovieViewHolder(
 
     fun bind(movie: MovieDomain){
         Glide.with(itemView.context)
-            .load(movie.posterPath.original)
+            .load(movie.fullPosterPath)
             .centerCrop()
             .fallback(R.drawable.baseline_broken)
             .into(image)
