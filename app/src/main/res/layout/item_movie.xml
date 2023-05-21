@@ -26,10 +26,9 @@
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="@font/courgette"
         android:gravity="bottom"
         android:textAllCaps="false"
-        android:textSize="11sp"
+        android:textSize="14sp"
         tools:text="ibweibiwbfrbfiqrbrbb" />
 
 </androidx.cardview.widget.CardView>

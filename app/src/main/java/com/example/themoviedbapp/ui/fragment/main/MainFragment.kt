@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -77,6 +78,14 @@ class MainFragment : Fragment() {
                 }
                 R.id.menu_favorite -> {
                     binding.container.currentItem = Option.FAVORITE.ordinal
+                    closeDrawerNav()
+                }
+                R.id.menu_mode_light -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    closeDrawerNav()
+                }
+                R.id.menu_mode_dark -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     closeDrawerNav()
                 }
                 else -> false

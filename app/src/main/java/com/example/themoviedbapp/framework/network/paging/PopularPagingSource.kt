@@ -20,14 +20,16 @@ class PopularPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDomain> {
         return try {
-            val nextPage = params.key ?: PAGE_INDEX
-            val popularResponse = dataSource.fetchPopular(
-                language = LANGUAGE, page = nextPage)
+            val position = params.key ?: PAGE_INDEX
+            val popularResponse = dataSource.fetchPopular(page = position)
+            val listData = popularResponse.results.map { it.toMovieDomain() }
+
             LoadResult.Page(
-                data = popularResponse.results.map { it.toMovieDomain() },
+                data = listData,
                 prevKey = null,
-                nextKey = if (popularResponse.page >= nextPage) nextPage + PAGE_INDEX else null
+                nextKey = if (popularResponse.page >= position) position + PAGE_INDEX else null
             )
+
         } catch (e: Exception){
             LoadResult.Error(e)
         }
@@ -35,6 +37,5 @@ class PopularPagingSource(
 
     companion object {
         private const val PAGE_INDEX = 1
-        private const val LANGUAGE = "en-US"
     }
 }

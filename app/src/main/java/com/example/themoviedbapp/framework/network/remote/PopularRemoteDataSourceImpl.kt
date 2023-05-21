@@ -8,11 +8,7 @@ import javax.inject.Inject
 class PopularRemoteDataSourceImpl @Inject constructor(
     private val api: TMDBApi
 ) : RemoteDataSource<DataWrapperResponse> {
-
-    override suspend fun fetchPopular(
-        language: String,
-        page: Int
-    ): DataWrapperResponse =
-        api.getPopularMovies(language, page)
+    override suspend fun fetchPopular(page: Int):
+            DataWrapperResponse = api.getPopularMovies(page)
 
 }
