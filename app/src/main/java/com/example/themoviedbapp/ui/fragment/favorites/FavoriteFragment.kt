@@ -17,6 +17,7 @@ import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentFavoriteBinding
 import com.example.themoviedbapp.databinding.FragmentPopularBinding
+import com.example.themoviedbapp.ui.fragment.main.Option
 import com.example.themoviedbapp.ui.fragment.movieadapter.MovieAdapter
 import com.example.themoviedbapp.ui.fragment.popular.viewmodel.PopularViewModel
 import com.example.themoviedbapp.util.animationCancel
@@ -48,7 +49,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        movieAdapter = MovieAdapter(::detail)
+        movieAdapter = MovieAdapter(::detail, Option.FAVORITE)
         val gridLayoutManager = GridLayoutManager(requireContext(),2)
         with(binding.recyclerView){
             scrollToPosition(0)
