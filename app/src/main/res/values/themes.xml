@@ -23,4 +23,14 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+
+    <style name="SearchViewColors" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="searchHintIcon">@drawable/ic_search</item>
+        <item name="android:textColor">?backgroundColor</item>
+        <item name="android:textColorHint">?backgroundColor</item>
+        <item name="android:tint">?backgroundColor</item>
+        <item name="android:editTextColor">?backgroundColor</item>
+    </style>
+
+
 </resources>
