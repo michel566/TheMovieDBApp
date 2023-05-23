@@ -1,4 +1,4 @@
-package com.example.themoviedbapp.framework.network.paging
+package com.example.themoviedbapp.framework.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -9,7 +9,9 @@ import com.example.themoviedbapp.framework.network.response.toMovieDomain
 
 class PopularPagingSource(
     private val dataSource: RemoteDataSource<DataWrapperResponse>
-    ) : PagingSource<Int, MovieDomain>() {
+) : PagingSource<Int, MovieDomain>() {
+
+
 
     override fun getRefreshKey(state: PagingState<Int, MovieDomain>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -22,18 +24,24 @@ class PopularPagingSource(
         return try {
             val position = params.key ?: PAGE_INDEX
             val popularResponse = dataSource.fetchPopular(page = position)
-            val listData = popularResponse.results.map { it.toMovieDomain() }
 
             LoadResult.Page(
-                data = listData,
+                data = getData(popularResponse),
                 prevKey = null,
                 nextKey = if (popularResponse.page >= position) position + PAGE_INDEX else null
             )
 
-        } catch (e: Exception){
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
+
+    fun getData(rawData: DataWrapperResponse) =
+        rawData.results.map {
+//            it.toMovieDomain(FavoriteCache.hasFavoriteId(it.id))
+            it.toMovieDomain(true)
+        }
+
 
     companion object {
         private const val PAGE_INDEX = 1

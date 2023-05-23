@@ -1,22 +1,20 @@
 package com.example.themoviedbapp.ui.fragment.favorites
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentFavoriteBinding
-import com.example.themoviedbapp.databinding.FragmentPopularBinding
 import com.example.themoviedbapp.ui.fragment.main.Option
 import com.example.themoviedbapp.ui.fragment.movieadapter.MovieAdapter
 import com.example.themoviedbapp.ui.fragment.popular.viewmodel.PopularViewModel
@@ -46,12 +44,13 @@ class FavoriteFragment : Fragment() {
         initAdapter()
         observerLoadState()
         fetchMovies()
+        setupWidgets()
     }
 
     private fun initAdapter() {
         movieAdapter = MovieAdapter(::detail, Option.FAVORITE)
-        val gridLayoutManager = GridLayoutManager(requireContext(),2)
-        with(binding.recyclerView){
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        with(binding.recyclerView) {
             scrollToPosition(0)
             layoutManager = gridLayoutManager
             setHasFixedSize(true)
@@ -68,16 +67,21 @@ class FavoriteFragment : Fragment() {
     private fun observerLoadState() {
         lifecycleScope.launch {
             movieAdapter.loadStateFlow.collectLatest { loadstate ->
-                when(loadstate.refresh){
+                when (loadstate.refresh) {
                     is LoadState.Loading -> {
                         binding.imagePulseAnimation.pulseAnimation()
                     }
-                    is LoadState.NotLoading ->{
+
+                    is LoadState.NotLoading -> {
                         binding.imagePulseAnimation.animationCancel()
                     }
+
                     is LoadState.Error -> {
-                        Toast.makeText(requireContext(), "Try again later", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Try again later", Toast.LENGTH_LONG)
+                            .show()
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -86,13 +90,19 @@ class FavoriteFragment : Fragment() {
     private fun fetchMovies() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
-                .repeatOnLifecycle(Lifecycle.State.STARTED){
-                    viewModel.popularMovies().collectLatest { pagingData ->
+                .repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.favoriteMovies().collect { pagingData ->
                         movieAdapter.submitData(pagingData)
                     }
                 }
         }
     }
 
+    private fun setupWidgets() {
+//        binding.errorLayout.isVisible = (movieAdapter.itemCount == 0)
+        if (movieAdapter.itemCount == 0) {
+            binding.errorLayout.setText(getString(R.string.error_message_no_favorites))
+        }
+    }
 
 }

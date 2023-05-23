@@ -1,4 +1,4 @@
-package com.example.themoviedbapp.framework.network.remote
+package com.example.themoviedbapp.framework.remote
 
 import com.example.core.data.RemoteDataSource
 import com.example.themoviedbapp.framework.network.api.TMDBApi

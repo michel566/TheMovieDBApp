@@ -80,6 +80,8 @@ class PopularFragment : Fragment() {
                     is LoadState.Error -> {
                         Toast.makeText(requireContext(), "Try again later", Toast.LENGTH_LONG).show()
                     }
+
+                    else -> {}
                 }
             }
         }

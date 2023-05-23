@@ -50,8 +50,9 @@ data class Movie(
 
 )
 
-fun Movie.toMovieDomain(): MovieDomain =
+fun Movie.toMovieDomain(isFavorite: Boolean): MovieDomain =
     MovieDomain(
+        isFavorite = isFavorite,
         isAdult = this.isAdult,
         backdropPath = this.backdropPath,
         genreIds = this.genreIds,
