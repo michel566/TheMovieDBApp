@@ -3,6 +3,7 @@ package com.example.core.model
 import com.example.core.GeneralConstants
 
 data class MovieDomain(
+    val isFavorite: Boolean = false,
     val isAdult: Boolean? = false,
     val backdropPath: String? = "",
     val genreIds: List<Int>?,
@@ -20,4 +21,6 @@ data class MovieDomain(
 ){
     val fullPosterPath: String
         get() = "${GeneralConstants.IMAGE_REPOSITORY_URL}$posterPath"
+
+
 }

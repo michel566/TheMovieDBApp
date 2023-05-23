@@ -16,6 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentMainBinding
+import com.example.themoviedbapp.framework.cache.KeyCacheConstants
+import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NIGHT_MODE
+import com.example.themoviedbapp.framework.cache.TMDBAppCache
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteFragment
 import com.example.themoviedbapp.ui.fragment.pageradapter.ViewPagerAdapter
 import com.example.themoviedbapp.ui.fragment.popular.PopularFragment
@@ -41,11 +44,16 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startPrefs()
         initToolbar()
         initViewPager()
         initTabLayout()
         initNavigationView()
         setupWidgets()
+    }
+
+    private fun startPrefs() {
+        setNightMode(TMDBAppCache.get(PREFS_NIGHT_MODE) ?: false)
     }
 
     private fun initToolbar(){
@@ -81,22 +89,21 @@ class MainFragment : Fragment() {
             when(it.itemId){
                 R.id.menu_popular -> {
                     goToPopulars()
-                    closeDrawerNav()
                 }
                 R.id.menu_favorite -> {
                     goToFavorites()
-                    closeDrawerNav()
                 }
                 R.id.menu_mode_light -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    closeDrawerNav()
+                    setNightMode(false)
+                    TMDBAppCache.update(PREFS_NIGHT_MODE, false)
                 }
                 R.id.menu_mode_dark -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    closeDrawerNav()
+                    setNightMode(true)
+                    TMDBAppCache.update(PREFS_NIGHT_MODE, true)
                 }
                 else -> false
             }
+            closeDrawerNav()
         }
     }
     private fun setupWidgets() = with(binding){
@@ -123,7 +130,15 @@ class MainFragment : Fragment() {
         )
 
         ivPopular.setOnClickListener {
-            goToFavorites()
+            goToPopulars()
+        }
+    }
+
+    private fun setNightMode(isNightMode: Boolean) {
+        if(isNightMode){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 

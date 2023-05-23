@@ -30,6 +30,7 @@
         <item name="android:textColorHint">?backgroundColor</item>
         <item name="android:tint">?backgroundColor</item>
         <item name="android:editTextColor">?backgroundColor</item>
+        <item name="backgroundTint">?backgroundColor</item>
     </style>
 
 
