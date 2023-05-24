@@ -6,6 +6,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.R
+import com.example.themoviedbapp.util.Utils
 
 abstract class MovieViewHolder(
     itemBinding: ViewBinding,
@@ -19,10 +20,6 @@ abstract class MovieViewHolder(
     }
 
     fun setupImage(imagePath: String?, view: ImageView) =
-        Glide.with(itemView.context)
-            .load(imagePath)
-            .centerCrop()
-            .fallback(R.drawable.baseline_broken)
-            .into(view)
+        Utils.setupResourceImage(itemView.context, view, imagePath)
 
 }

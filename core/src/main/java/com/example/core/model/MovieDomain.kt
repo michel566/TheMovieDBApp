@@ -22,5 +22,14 @@ data class MovieDomain(
     val fullPosterPath: String
         get() = "${GeneralConstants.IMAGE_REPOSITORY_URL}$posterPath"
 
-
+    fun getGenresName(genreList: List<Genre>): List<String>{
+        val list: MutableList<String> = mutableListOf()
+        genreList.forEach { genre ->
+            genreIds?.forEach { id ->
+                if (genre.id == id)
+                    list.add(genre.name)
+            }
+        }
+        return list.toList()
+    }
 }
