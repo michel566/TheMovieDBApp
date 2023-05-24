@@ -11,8 +11,6 @@ class PopularPagingSource(
     private val dataSource: RemoteDataSource<DataWrapperResponse>
 ) : PagingSource<Int, MovieDomain>() {
 
-
-
     override fun getRefreshKey(state: PagingState<Int, MovieDomain>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)

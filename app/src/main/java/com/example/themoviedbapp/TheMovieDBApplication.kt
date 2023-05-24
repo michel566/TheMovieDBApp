@@ -13,4 +13,9 @@ class TheMovieDBApplication: Application() {
 
         TMDBAppCache.start(this)
     }
+
+    override fun onTerminate() {
+        TMDBAppCache.wipeOut()
+        super.onTerminate()
+    }
 }

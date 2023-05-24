@@ -22,7 +22,7 @@ class FavoriteViewHolder(
         setupImage(movie.fullPosterPath, image)
         name.text = movie.title
         isFavorite = movie.isFavorite
-        Utils.setFavoriteButton(movie, favorite, isFavorite)
+        Utils.setFavoriteButton(favorite, isFavorite)
 
         super.bind(movie)
     }

@@ -1,6 +1,5 @@
 package com.example.themoviedbapp.ui.fragment.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,18 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentMainBinding
-import com.example.themoviedbapp.framework.cache.KeyCacheConstants
 import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NIGHT_MODE
 import com.example.themoviedbapp.framework.cache.TMDBAppCache
+import com.example.themoviedbapp.framework.model.MovieDetailDomain
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteFragment
 import com.example.themoviedbapp.ui.fragment.pageradapter.ViewPagerAdapter
 import com.example.themoviedbapp.ui.fragment.popular.PopularFragment
 import com.google.android.material.tabs.TabLayoutMediator
-import java.lang.RuntimeException
 
 class MainFragment : Fragment() {
 
@@ -32,6 +31,7 @@ class MainFragment : Fragment() {
     private val popularFragment = PopularFragment()
     private val favoriteFragment = FavoriteFragment()
     private val fragments = listOf(popularFragment, favoriteFragment)
+
     private lateinit var option: Option
 
     override fun onCreateView(
@@ -56,11 +56,11 @@ class MainFragment : Fragment() {
         setNightMode(TMDBAppCache.get(PREFS_NIGHT_MODE) ?: false)
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
     }
 
-    private fun initViewPager(){
+    private fun initViewPager() {
         val pagerAdapter = ViewPagerAdapter(context as FragmentActivity, fragments)
         binding.run {
             container.adapter = pagerAdapter
@@ -69,8 +69,10 @@ class MainFragment : Fragment() {
     }
 
     private fun initTabLayout() {
-        TabLayoutMediator(binding.tabLayout,
-            binding.container) { tab, position ->
+        TabLayoutMediator(
+            binding.tabLayout,
+            binding.container
+        ) { tab, position ->
             tab.text = tagTitle[position]
         }.attach()
     }
@@ -83,37 +85,43 @@ class MainFragment : Fragment() {
         binding.navigationView.itemIconTintList = null
         NavigationUI.setupWithNavController(
             navigationView = binding.navigationView,
-            navController = findNavController())
+            navController = findNavController()
+        )
 
         binding.navigationView.setNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.menu_popular -> {
                     goToPopulars()
                 }
+
                 R.id.menu_favorite -> {
                     goToFavorites()
                 }
+
                 R.id.menu_mode_light -> {
                     setNightMode(false)
                     TMDBAppCache.update(PREFS_NIGHT_MODE, false)
                 }
+
                 R.id.menu_mode_dark -> {
                     setNightMode(true)
                     TMDBAppCache.update(PREFS_NIGHT_MODE, true)
                 }
+
                 else -> false
             }
             closeDrawerNav()
         }
     }
-    private fun setupWidgets() = with(binding){
+
+    private fun setupWidgets() = with(binding) {
         ivSearch.setOnClickListener {
             changeAppBarVisibility(false)
             svPopular.requestFocus()
         }
 
-        svPopular.setOnQueryTextFocusChangeListener {
-                view, isFocused -> changeAppBarVisibility(!isFocused)
+        svPopular.setOnQueryTextFocusChangeListener { view, isFocused ->
+            changeAppBarVisibility(!isFocused)
         }
 
         svPopular.setOnQueryTextListener(
@@ -135,21 +143,21 @@ class MainFragment : Fragment() {
     }
 
     private fun setNightMode(isNightMode: Boolean) {
-        if(isNightMode){
+        if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 
-    private fun goToPopulars() = with(binding){
+    private fun goToPopulars() = with(binding) {
         option = Option.POPULAR
         ivSearch.isVisible = true
         ivPopular.isVisible = false
         container.currentItem = option.ordinal
     }
 
-    private fun goToFavorites() = with(binding){
+    private fun goToFavorites() = with(binding) {
         option = Option.FAVORITE
         ivSearch.isVisible = false
         svPopular.isVisible = false
@@ -166,5 +174,10 @@ class MainFragment : Fragment() {
         binding.root.closeDrawer(GravityCompat.START)
         return true
     }
+
+    fun goToDetailsFragment(navController: NavController, movieDetail: MovieDetailDomain) =
+        navController.navigate(
+            MainFragmentDirections.actionMainFragmentToDetailsFragment(movieDetail)
+        )
 
 }

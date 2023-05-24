@@ -9,16 +9,36 @@
         android:id="@+id/mainFragment"
         android:name="com.example.themoviedbapp.ui.fragment.main.MainFragment"
         android:label="Main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/popularFragment"
         android:name="com.example.themoviedbapp.ui.fragment.popular.PopularFragment"
         android:label="Popular"
-        tools:layout="@layout/fragment_popular" />
+        tools:layout="@layout/fragment_popular">
+        <action
+            android:id="@+id/action_popularFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.themoviedbapp.ui.fragment.favorites.FavoriteFragment"
         android:label="Favorite"
-        tools:layout="@layout/fragment_favorite"
-        />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.themoviedbapp.ui.fragment.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="movieDetail"
+            app:argType="com.example.themoviedbapp.framework.model.MovieDetailDomain" />
+    </fragment>
 </navigation>
