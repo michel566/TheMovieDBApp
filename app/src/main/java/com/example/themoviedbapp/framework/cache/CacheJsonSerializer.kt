@@ -3,7 +3,6 @@ package com.example.themoviedbapp.framework.cache
 import com.google.gson.Gson
 
 object CacheJsonSerializer {
-
     fun <T> saveList(key: String, list: List<T>?) {
         val gson = Gson()
         val json = gson.toJson(list)

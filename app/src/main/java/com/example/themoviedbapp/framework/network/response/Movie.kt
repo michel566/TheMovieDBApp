@@ -1,7 +1,6 @@
 package com.example.themoviedbapp.framework.network.response
 
 import com.example.core.model.MovieDomain
-import com.example.themoviedbapp.framework.network.response.mapper.SrcDomainMapper
 import com.google.gson.annotations.SerializedName
 
 data class Movie(
@@ -48,7 +47,7 @@ data class Movie(
     @SerializedName("vote_count")
     val voteCount: Int?,
 
-)
+    )
 
 fun Movie.toMovieDomain(isFavorite: Boolean): MovieDomain =
     MovieDomain(

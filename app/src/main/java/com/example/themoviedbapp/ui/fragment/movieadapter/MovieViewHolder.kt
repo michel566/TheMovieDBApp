@@ -3,9 +3,7 @@ package com.example.themoviedbapp.ui.fragment.movieadapter
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bumptech.glide.Glide
 import com.example.core.model.MovieDomain
-import com.example.themoviedbapp.R
 import com.example.themoviedbapp.util.Utils
 
 abstract class MovieViewHolder(

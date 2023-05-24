@@ -9,7 +9,6 @@ class ViewPagerAdapter(
     private val fragmentList: List<Fragment>
 ) :
     FragmentStateAdapter(container) {
-
     override fun getItemCount() = fragmentList.size
     override fun createFragment(position: Int) = fragmentList[position]
 }
