@@ -1,10 +1,13 @@
 package com.example.themoviedbapp.framework.di
 
+import com.example.core.data.GenreRepository
 import com.example.core.data.PopularRepository
 import com.example.core.data.RemoteDataSource
-import com.example.themoviedbapp.framework.remote.PopularRemoteDataSourceImpl
-import com.example.themoviedbapp.framework.repository.PopularRepositoryImpl
+import com.example.core.model.Genre
 import com.example.themoviedbapp.framework.network.response.DataWrapperResponse
+import com.example.themoviedbapp.framework.remote.PopularRemoteDataSourceImpl
+import com.example.themoviedbapp.framework.repository.GenreRepositoryImpl
+import com.example.themoviedbapp.framework.repository.PopularRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,5 +22,8 @@ interface RepositoryModule {
 
     @Binds
     fun bindRemoteDataSource(dataSourceImpl: PopularRemoteDataSourceImpl): RemoteDataSource<DataWrapperResponse>
+
+    @Binds
+    fun bindGenreRepository(repositoryImpl: GenreRepositoryImpl) : GenreRepository
 
 }

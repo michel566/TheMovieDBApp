@@ -10,16 +10,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.databinding.FragmentPopularBinding
+import com.example.themoviedbapp.framework.model.MovieDetailDomain
+import com.example.themoviedbapp.ui.fragment.main.MainFragment
 import com.example.themoviedbapp.ui.fragment.main.Option
 import com.example.themoviedbapp.ui.fragment.movieadapter.MovieAdapter
 import com.example.themoviedbapp.ui.fragment.popular.viewmodel.PopularViewModel
 import com.example.themoviedbapp.util.animationCancel
 import com.example.themoviedbapp.util.pulseAnimation
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +32,8 @@ class PopularFragment : Fragment() {
     private lateinit var binding: FragmentPopularBinding
     private lateinit var movieAdapter: MovieAdapter
     private val viewModel: PopularViewModel by viewModels()
+
+    private val mainFragment by lazy { MainFragment() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,9 +66,18 @@ class PopularFragment : Fragment() {
     }
 
     private fun detail(movie: MovieDomain) {
-        val data = arrayOf(movie.fullPosterPath, movie.overview)
-        //todo: criar e redirecionar o data para tela de detalhes
-//        findNavController().navigate(MainFragmentDirections.actionMainFragmentToDownloadFragment(data))
+        mainFragment.goToDetailsFragment(findNavController(),
+            MovieDetailDomain(
+                id = movie.id,
+                isFavorite = movie.isFavorite,
+                imagePath = movie.fullPosterPath,
+                genresId = movie.genreIds,
+                originalTitle = movie.originalTitle,
+                overview = movie.overview,
+                releaseDate = movie.releaseDate,
+                title = movie.title
+            )
+        )
     }
 
     private fun observerLoadState() {
@@ -86,6 +99,7 @@ class PopularFragment : Fragment() {
             }
         }
     }
+
     private fun fetchMovies() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
