@@ -11,8 +11,8 @@ object TMDBAppCache {
     fun <T> insert(key: String, value: T?) =
         Hawk.put(key, value)
 
-    fun <T> update(key: String, value: T?){
-        if(Hawk.contains(key)){
+    fun <T> update(key: String, value: T?) {
+        if (Hawk.contains(key)) {
             Hawk.delete(key)
         }
         insert(key, value)
@@ -27,7 +27,7 @@ object TMDBAppCache {
     fun contains(key: String): Boolean =
         Hawk.contains(key)
 
-    fun wipeOut(){
+    fun wipeOut() {
         Hawk.deleteAll()
     }
 }

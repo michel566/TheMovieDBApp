@@ -57,7 +57,7 @@ class PopularFragment : Fragment() {
     private fun initAdapter() {
         movieAdapter = MovieAdapter(::detail, Option.POPULAR)
         val linearLayoutManager = LinearLayoutManager(requireContext())
-        with(binding.recyclerView){
+        with(binding.recyclerView) {
             scrollToPosition(0)
             layoutManager = linearLayoutManager
             setHasFixedSize(true)
@@ -66,7 +66,8 @@ class PopularFragment : Fragment() {
     }
 
     private fun detail(movie: MovieDomain) {
-        mainFragment.goToDetailsFragment(findNavController(),
+        mainFragment.goToDetailsFragment(
+            findNavController(),
             MovieDetailDomain(
                 id = movie.id,
                 isFavorite = movie.isFavorite,
@@ -83,15 +84,18 @@ class PopularFragment : Fragment() {
     private fun observerLoadState() {
         lifecycleScope.launch {
             movieAdapter.loadStateFlow.collectLatest { loadstate ->
-                when(loadstate.refresh){
+                when (loadstate.refresh) {
                     is LoadState.Loading -> {
                         binding.imagePulseAnimation.pulseAnimation()
                     }
-                    is LoadState.NotLoading ->{
+
+                    is LoadState.NotLoading -> {
                         binding.imagePulseAnimation.animationCancel()
                     }
+
                     is LoadState.Error -> {
-                        Toast.makeText(requireContext(), "Try again later", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "Try again later", Toast.LENGTH_LONG)
+                            .show()
                     }
 
                     else -> {}
@@ -103,7 +107,7 @@ class PopularFragment : Fragment() {
     private fun fetchMovies() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
-                .repeatOnLifecycle(Lifecycle.State.STARTED){
+                .repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.popularMovies().collectLatest { pagingData ->
                         movieAdapter.submitData(pagingData)
                     }

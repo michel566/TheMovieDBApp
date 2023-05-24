@@ -36,7 +36,7 @@ object Utils {
         var i = 0
         if (list.isNotEmpty()) {
             list.forEach {
-                if (i >= list.size - 1){
+                if (i >= list.size - 1) {
                     text += " and"
                     text += " $it"
                 } else {

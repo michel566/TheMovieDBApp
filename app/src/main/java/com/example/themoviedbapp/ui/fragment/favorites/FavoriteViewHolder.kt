@@ -27,7 +27,6 @@ class FavoriteViewHolder(
         super.bind(movie)
     }
 
-
     companion object {
         fun create(
             parent: ViewGroup,
