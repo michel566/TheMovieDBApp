@@ -34,12 +34,10 @@ class PopularPagingSource(
         }
     }
 
-    fun getData(rawData: DataWrapperResponse) =
+    private fun getData(rawData: DataWrapperResponse) =
         rawData.results.map {
-//            it.toMovieDomain(FavoriteCache.hasFavoriteId(it.id))
-            it.toMovieDomain(true)
+            it.toMovieDomain()
         }
-
 
     companion object {
         private const val PAGE_INDEX = 1

@@ -27,4 +27,8 @@ dependencies {
 
     // Coroutines core
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
+    //room(sqlite)
+    api "androidx.room:room-common:$room_version"
+
 }

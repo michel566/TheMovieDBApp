@@ -22,11 +22,11 @@ class PopularViewModel @Inject constructor(
         popularUseCase(GetPopularUseCase.GetPopularParams(pagingConfig()))
             .cachedIn(viewModelScope)
 
-    fun favoriteMovies(): Flow<PagingData<MovieDomain>> {
-        return popularMovies().map { pagingData ->
-            pagingData.filter { movie -> movie.isFavorite }
-        }
-    }
+//    fun favoriteMovies(): Flow<PagingData<MovieDomain>> {
+//        return popularMovies().map { pagingData ->
+//            pagingData.filter { movie -> movie.isFavorite }
+//        }
+//    }
 
     private fun pagingConfig() = PagingConfig(pageSize = 40)
 

@@ -7,6 +7,8 @@ import com.example.themoviedbapp.framework.network.response.DataWrapperResponse
 import com.example.themoviedbapp.framework.remote.PopularRemoteDataSourceImpl
 import com.example.themoviedbapp.framework.repository.GenreRepositoryImpl
 import com.example.themoviedbapp.framework.repository.PopularRepositoryImpl
+import com.example.themoviedbapp.framework.repository.favorite.FavoriteRepository
+import com.example.themoviedbapp.framework.repository.favorite.FavoriteRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,5 +26,8 @@ interface RepositoryModule {
 
     @Binds
     fun bindGenreRepository(repositoryImpl: GenreRepositoryImpl): GenreRepository
+
+    @Binds
+    fun bindFavoriteRepository(repositoryImpl: FavoriteRepositoryImpl): FavoriteRepository
 
 }

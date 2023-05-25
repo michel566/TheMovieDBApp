@@ -15,12 +15,8 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DBModule {
     @Provides
-    fun providesAppDatabase(@ApplicationContext context: Context) =
-        Room.databaseBuilder(
-            context = context,
-            klass = AppDatabase::class.java,
-            name = DBConstants.APP_DATABASE_NAME
-        ).build()
+    fun providesAppDatabase(@ApplicationContext context: Context) : AppDatabase =
+        Room.databaseBuilder(context = context, klass = AppDatabase::class.java, name = DBConstants.APP_DATABASE_NAME).build()
 
     @Provides
     fun providesTMDBDao(db: AppDatabase) =

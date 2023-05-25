@@ -20,6 +20,7 @@ import com.example.themoviedbapp.ui.fragment.main.MainFragment
 import com.example.themoviedbapp.ui.fragment.main.Option
 import com.example.themoviedbapp.ui.fragment.movieadapter.MovieAdapter
 import com.example.themoviedbapp.ui.fragment.popular.viewmodel.PopularViewModel
+import com.example.themoviedbapp.util.DataMapper
 import com.example.themoviedbapp.util.animationCancel
 import com.example.themoviedbapp.util.pulseAnimation
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,9 @@ class PopularFragment : Fragment() {
     private lateinit var movieAdapter: MovieAdapter
     private val viewModel: PopularViewModel by viewModels()
 
-    private val mainFragment by lazy { MainFragment() }
+    private val mainFragment by lazy {
+        MainFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,19 +69,7 @@ class PopularFragment : Fragment() {
     }
 
     private fun detail(movie: MovieDomain) {
-        mainFragment.goToDetailsFragment(
-            findNavController(),
-            MovieDetailDomain(
-                id = movie.id,
-                isFavorite = movie.isFavorite,
-                imagePath = movie.fullPosterPath,
-                genresId = movie.genreIds,
-                originalTitle = movie.originalTitle,
-                overview = movie.overview,
-                releaseDate = movie.releaseDate,
-                title = movie.title
-            )
-        )
+        mainFragment.goToDetailsFragment(findNavController(), DataMapper.movieDomainToDetail(movie))
     }
 
     private fun observerLoadState() {

@@ -5,6 +5,9 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.core.model.Genre
 import com.example.themoviedbapp.R
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object Utils {
 
@@ -64,4 +67,23 @@ object Utils {
         }
         return list.toList()
     }
+
+    fun parseDateToddMMyyyy(inputPattern: String, time: String?, outputPattern: String): String? {
+        val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
+        val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
+        var str: String? = null
+
+        time?.let {
+            try {
+                inputFormat.parse(it)?.let { date ->
+                    str = outputFormat.format(date)
+                }
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+        }
+
+        return str
+    }
+
 }

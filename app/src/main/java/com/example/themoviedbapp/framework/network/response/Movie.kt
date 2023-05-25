@@ -49,21 +49,21 @@ data class Movie(
 
     )
 
-fun Movie.toMovieDomain(isFavorite: Boolean): MovieDomain =
+fun Movie.toMovieDomain(): MovieDomain =
     MovieDomain(
-        isFavorite = isFavorite,
-        isAdult = this.isAdult,
-        backdropPath = this.backdropPath,
-        genreIds = this.genreIds,
-        id = this.id,
-        originalLanguage = this.originalLanguage,
-        originalTitle = this.originalTitle,
-        overview = this.overview,
-        popularity = this.popularity,
-        posterPath = this.posterPath,
-        releaseDate = this.releaseDate,
-        title = this.title,
-        video = this.video,
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount
+        isFavorite = false,
+        isAdult = this.isAdult ?: false,
+        backdropPath = this.backdropPath ?: "",
+        genreIds = this.genreIds ?: listOf(),
+        id = this.id ?: 0,
+        originalLanguage = this.originalLanguage ?: "",
+        originalTitle = this.originalTitle ?: "",
+        overview = this.overview ?: "",
+        popularity = this.popularity ?: 0.0,
+        posterPath = this.posterPath ?: "",
+        releaseDate = this.releaseDate ?: "",
+        title = this.title ?: "",
+        video = this.video ?: false,
+        voteAverage = this.voteAverage ?: 0.0,
+        voteCount = this.voteCount ?: 0
     )
