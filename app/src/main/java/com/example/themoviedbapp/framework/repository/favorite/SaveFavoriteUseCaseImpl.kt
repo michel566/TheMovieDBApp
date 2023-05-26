@@ -7,7 +7,7 @@ class SaveFavoriteUseCaseImpl @Inject constructor(
     private val repository: FavoriteRepository
 ) : SaveFavoriteUseCase {
 
-    override fun invoke(movie: MovieDomain) =
+    override suspend fun invoke(movie: MovieDomain) =
         repository.saveFavorite(movie)
 
 }

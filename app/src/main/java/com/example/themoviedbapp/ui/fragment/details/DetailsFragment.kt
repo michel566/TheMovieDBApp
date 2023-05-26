@@ -28,6 +28,7 @@ class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
     private val genreViewModel: GenreViewModel by viewModels()
+
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private lateinit var genres: List<Genre>
@@ -108,6 +109,7 @@ class DetailsFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
                 .repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    movieDetail.isFavorite = isFavorite
                     favoriteViewModel.saveFavorite(
                         DataMapper.movieDetailToDomain(movieDetail)
                     )

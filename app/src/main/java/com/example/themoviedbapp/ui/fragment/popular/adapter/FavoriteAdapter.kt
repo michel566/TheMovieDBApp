@@ -5,16 +5,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteViewHolder
-import okhttp3.internal.notifyAll
 
 class FavoriteAdapter(
-    private val movieCallback: ((movie: MovieDomain) -> Unit)
+    private val openDetailCallback: (movie: MovieDomain) -> Unit,
+    private val saveFavoriteCallback: (movie: MovieDomain) -> Unit,
+    private val removeFavoriteCallback: (movie: MovieDomain) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private lateinit var mList: List<MovieDomain>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return FavoriteViewHolder.create(parent, movieCallback)
+        return FavoriteViewHolder.create(parent, openDetailCallback, saveFavoriteCallback, removeFavoriteCallback)
     }
 
     override fun getItemCount() = if (mList.isEmpty()) 0 else mList.size

@@ -3,7 +3,7 @@ package com.example.core.model
 import com.example.core.GeneralConstants
 
 data class MovieDomain(
-    val isFavorite: Boolean = false,
+    var isFavorite: Boolean = false,
     val isAdult: Boolean = false,
     val backdropPath: String = "",
     val genreIds: List<Int>,

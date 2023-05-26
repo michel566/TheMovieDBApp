@@ -3,6 +3,7 @@ package com.example.themoviedbapp.util
 import com.example.core.model.MovieDomain
 import com.example.core.model.entities.GenreEntity
 import com.example.core.model.entities.MovieEntity
+import com.example.core.model.entities.MovieWithGenreEntity
 import com.example.themoviedbapp.framework.model.MovieDetailDomain
 
 object DataMapper {
@@ -16,7 +17,7 @@ object DataMapper {
             isAdult = entity.isAdult,
             backdropPath = entity.backdropPath,
             genreIds = genreListId,
-            id = entity.id,
+            id = entity.movieId,
             originalLanguage = entity.originalLanguage,
             originalTitle = entity.originalTitle,
             overview = entity.overview,
@@ -34,7 +35,7 @@ object DataMapper {
             isFavorite = domain.isFavorite,
             isAdult = domain.isAdult,
             backdropPath = domain.backdropPath,
-            id = domain.id,
+            movieId = domain.id,
             originalLanguage = domain.originalLanguage,
             originalTitle = domain.originalTitle,
             overview = domain.overview,
@@ -46,6 +47,7 @@ object DataMapper {
             voteAverage = domain.voteAverage,
             voteCount = domain.voteCount
         )
+
 
     fun movieDomainToDetail(domain: MovieDomain) =
         MovieDetailDomain(
@@ -87,13 +89,32 @@ object DataMapper {
         )
 
 
+    fun movieWithGenreEntityToDomain(entity: MovieWithGenreEntity) =
+        MovieDomain(
+            id = entity.movie.movieId ,
+            isFavorite = entity.movie.isFavorite,
+            isAdult = entity.movie.isAdult,
+            backdropPath = entity.movie.backdropPath,
+            genreIds = entity.listGenres.map { it.movieId },
+            originalLanguage = entity.movie.originalLanguage,
+            originalTitle = entity.movie.originalTitle,
+            overview = entity.movie.overview,
+            popularity = entity.movie.popularity,
+            posterPath = entity.movie.posterPath,
+            releaseDate = entity.movie.releaseDate,
+            title = entity.movie.title,
+            video = entity.movie.video,
+            voteAverage = entity.movie.voteAverage,
+            voteCount = entity.movie.voteCount
+        )
+
     fun pairOfEntitiesToListMovieDomain(
         movieList: List<MovieEntity>, genreList: List<GenreEntity>
     )
             : List<MovieDomain> {
         return movieList.map { movie ->
             genreList.map { genre ->
-                if (genre.movieId == movie.id)
+                if (genre.movieId == movie.movieId)
                     genre.id
                 else
                     0

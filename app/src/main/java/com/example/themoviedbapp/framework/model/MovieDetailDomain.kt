@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class MovieDetailDomain(
     val id: Int? = 0,
-    val isFavorite: Boolean = false,
+    var isFavorite: Boolean = false,
     val imagePath: String = "",
     val genresId: List<Int>?,
     val originalTitle: String? = "",

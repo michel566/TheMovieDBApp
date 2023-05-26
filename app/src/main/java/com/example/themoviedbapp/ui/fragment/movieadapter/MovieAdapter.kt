@@ -10,13 +10,9 @@ import com.example.themoviedbapp.ui.fragment.popular.PopularViewHolder
 
 class MovieAdapter(
     private val movieCallback: ((movie: MovieDomain) -> Unit),
-    private val type: Option
 ) : PagingDataAdapter<MovieDomain, MovieViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return when (type) {
-            Option.FAVORITE -> FavoriteViewHolder.create(parent, movieCallback)
-            Option.POPULAR -> PopularViewHolder.create(parent, movieCallback)
-        }
+        return PopularViewHolder.create(parent, movieCallback)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {

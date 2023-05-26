@@ -6,7 +6,7 @@ class DeleteFavoriteUseCaseImpl @Inject constructor(
     private val repository: FavoriteRepository
 ) : DeleteFavoriteUseCase {
 
-    override fun invoke(id: Int, genreList: List<Int>) {
+    override suspend fun invoke(id: Int, genreList: List<Int>) {
         repository.deleteMovieById(id, genreList)
     }
 }

@@ -7,7 +7,7 @@ import com.example.core.data.DBConstants
 @Entity(tableName = DBConstants.MOVIE_TABLE_NAME)
 data class MovieEntity (
 
-    @PrimaryKey val id: Int,
+    @PrimaryKey val movieId: Int,
     val isFavorite: Boolean,
     val isAdult: Boolean,
     val backdropPath: String,
@@ -22,4 +22,4 @@ data class MovieEntity (
     val voteAverage: Double,
     val voteCount: Int,
 
-)
+    )

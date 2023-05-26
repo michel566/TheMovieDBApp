@@ -58,7 +58,7 @@ class PopularFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        movieAdapter = MovieAdapter(::detail, Option.POPULAR)
+        movieAdapter = MovieAdapter(::detail)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         with(binding.recyclerView) {
             scrollToPosition(0)
