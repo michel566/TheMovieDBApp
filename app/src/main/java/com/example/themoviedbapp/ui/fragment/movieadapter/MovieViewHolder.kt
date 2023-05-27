@@ -8,12 +8,12 @@ import com.example.themoviedbapp.util.Utils
 
 abstract class MovieViewHolder(
     itemBinding: ViewBinding,
-    private val movieCallback: (movie: MovieDomain) -> Unit
+    private val movieCallback: ((movie: MovieDomain) -> Unit)?
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
     open fun bind(movie: MovieDomain) {
         itemView.setOnClickListener {
-            movieCallback.invoke(movie)
+            movieCallback?.invoke(movie)
         }
     }
 

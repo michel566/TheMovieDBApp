@@ -8,10 +8,9 @@ import com.example.themoviedbapp.ui.fragment.movieadapter.MovieViewHolder
 
 class FavoriteViewHolder(
     itemBinding: ItemFavoriteBinding,
-    private val openDetailCallback: (movie: MovieDomain) -> Unit,
     private val saveFavoriteCallback: (movie: MovieDomain) -> Unit,
     private val removeFavoriteCallback: (movie: MovieDomain) -> Unit
-) : MovieViewHolder(itemBinding, openDetailCallback) {
+) : MovieViewHolder(itemBinding, null) {
 
     private val image = itemBinding.image
     private val name = itemBinding.name
@@ -21,9 +20,6 @@ class FavoriteViewHolder(
 
     override fun bind(movie: MovieDomain) {
         setupImage(movie.fullPosterPath, image)
-        image.setOnClickListener {
-            openDetailCallback.invoke(movie)
-        }
 
         name.text = movie.title
         isFavorite = movie.isFavorite
@@ -52,13 +48,16 @@ class FavoriteViewHolder(
     companion object {
         fun create(
             parent: ViewGroup,
-            openDetailCallback: (movie: MovieDomain) -> Unit,
             saveFavoriteCallback: (movie: MovieDomain) -> Unit,
             removeFavoriteCallback: (movie: MovieDomain) -> Unit
         ): FavoriteViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val itemBinding = ItemFavoriteBinding.inflate(inflater, parent, false)
-            return FavoriteViewHolder(itemBinding, openDetailCallback, saveFavoriteCallback, removeFavoriteCallback)
+            return FavoriteViewHolder(
+                itemBinding,
+                saveFavoriteCallback,
+                removeFavoriteCallback
+            )
         }
     }
 

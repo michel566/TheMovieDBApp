@@ -16,9 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentMainBinding
+import com.example.themoviedbapp.framework.cache.KeyCacheConstants
+import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NEED_REFRESH
 import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NIGHT_MODE
 import com.example.themoviedbapp.framework.cache.TMDBAppCache
 import com.example.themoviedbapp.framework.model.MovieDetailDomain
+import com.example.themoviedbapp.ui.activity.MainActivity
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteFragment
 import com.example.themoviedbapp.ui.fragment.pageradapter.ViewPagerAdapter
 import com.example.themoviedbapp.ui.fragment.popular.PopularFragment
@@ -30,7 +33,8 @@ class MainFragment : Fragment() {
     private val tagTitle = listOf(Option.POPULAR.value, Option.FAVORITE.value)
     private val popularFragment = PopularFragment()
     private val favoriteFragment = FavoriteFragment()
-    private val fragments = listOf(popularFragment, favoriteFragment)
+    private val fragments = mutableListOf(popularFragment, favoriteFragment)
+    private lateinit var pagerAdapter: ViewPagerAdapter
 
     private lateinit var option: Option
 
@@ -52,6 +56,7 @@ class MainFragment : Fragment() {
         setupWidgets()
     }
 
+
     private fun startPrefs() {
         setNightMode(TMDBAppCache.get(PREFS_NIGHT_MODE) ?: false)
     }
@@ -61,7 +66,7 @@ class MainFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        val pagerAdapter = ViewPagerAdapter(context as FragmentActivity, fragments)
+        pagerAdapter = ViewPagerAdapter(context as FragmentActivity, fragments)
         binding.run {
             container.adapter = pagerAdapter
             container.isUserInputEnabled = false
@@ -163,6 +168,12 @@ class MainFragment : Fragment() {
         svPopular.isVisible = false
         ivPopular.isVisible = true
         container.currentItem = option.ordinal
+        val isReload = TMDBAppCache.get<Boolean>(PREFS_NEED_REFRESH)
+        if (isReload){
+            favoriteFragment.loadFavoriteMovies()
+            TMDBAppCache.update(PREFS_NEED_REFRESH, false)
+        }
+
     }
 
     private fun changeAppBarVisibility(isVisible: Boolean) = with(binding) {

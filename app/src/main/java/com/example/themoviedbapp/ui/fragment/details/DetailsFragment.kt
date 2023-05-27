@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,10 +16,15 @@ import com.example.core.GeneralConstants.PATTERN_DD_MM_YYYY
 import com.example.core.GeneralConstants.PATTERN_YYYY_MM_DD
 import com.example.core.model.Genre
 import com.example.themoviedbapp.databinding.FragmentDetailsBinding
+import com.example.themoviedbapp.framework.cache.KeyCacheConstants
+import com.example.themoviedbapp.framework.cache.TMDBAppCache
+import com.example.themoviedbapp.framework.model.MovieDetailDomain
 import com.example.themoviedbapp.ui.fragment.details.viewmodel.GenreViewModel
 import com.example.themoviedbapp.ui.fragment.favorites.viewmodel.FavoriteViewModel
 import com.example.themoviedbapp.util.DataMapper
 import com.example.themoviedbapp.util.Utils
+import com.example.themoviedbapp.util.animationCancel
+import com.example.themoviedbapp.util.pulseAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,9 +38,7 @@ class DetailsFragment : Fragment() {
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     private lateinit var genres: List<Genre>
-    private val movieDetail by lazy {
-        args.movieDetail
-    }
+    private lateinit var movieDetail: MovieDetailDomain
 
     private var isFavorite = false
 
@@ -48,15 +52,43 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupWidgets()
-        getGenreList()
+        loadFavoriteMovies()
     }
 
-    private fun setupWidgets() = with(binding) {
+    private fun loadFavoriteMovies() {
+        movieDetail = args.movieDetail
+        loadImage(false)
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle
+                .repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    favoriteViewModel.getAllFavorites(
+                        onSuccess = { data ->
+                            data.forEach {
+                                if (it.isFavorite && it.id == args.movieDetail.id) {
+                                    movieDetail = DataMapper.movieDomainToDetail(it)
+                                }
+                            }
+                            setupWidgets(movieDetail)
+                        },
+                        onEmptyList = {
+                            setupWidgets(movieDetail)
+                        },
+                        onError = {}
+                    )
+                }
+        }
+    }
+
+    private fun reload() =
+        TMDBAppCache.update(KeyCacheConstants.PREFS_NEED_REFRESH, true)
+
+    private fun setupWidgets(movie: MovieDetailDomain) = with(binding) {
+        getGenreList()
         ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        movieDetail = movie
         movieDetail.let {
             tvToolbarTitle.text = it.title
             isFavorite = it.isFavorite
@@ -82,6 +114,7 @@ class DetailsFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 genres = genreViewModel.getGenreList()
                 setupGenres()
+                loadImage(true)
             }
         }
     }
@@ -97,6 +130,7 @@ class DetailsFragment : Fragment() {
             setOnClickListener {
                 isFavorite = !isFavorite
                 isHovered = isFavorite
+                movieDetail.isFavorite = isFavorite
 
                 if (isFavorite)
                     saveFavorite()
@@ -109,10 +143,10 @@ class DetailsFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
                 .repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    movieDetail.isFavorite = isFavorite
                     favoriteViewModel.saveFavorite(
                         DataMapper.movieDetailToDomain(movieDetail)
                     )
+                    reload()
                 }
         }
     }
@@ -121,15 +155,19 @@ class DetailsFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
                 .repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    movieDetail.genresId?.let { list ->
-                        movieDetail.id?.let { id ->
-                            favoriteViewModel.deleteFavoriteById(
-                                id, list
-                            )
-                        }
+                    movieDetail.id?.let { id ->
+                        favoriteViewModel.deleteFavoriteById(id)
                     }
+                    reload()
                 }
+
         }
+    }
+
+    private fun loadImage(show: Boolean) = with(binding) {
+        ivImage.isVisible = show
+        if (show) imagePulseAnimation.animationCancel()
+        else imagePulseAnimation.pulseAnimation()
     }
 
 

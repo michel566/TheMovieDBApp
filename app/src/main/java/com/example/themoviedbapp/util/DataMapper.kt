@@ -48,7 +48,6 @@ object DataMapper {
             voteCount = domain.voteCount
         )
 
-
     fun movieDomainToDetail(domain: MovieDomain) =
         MovieDetailDomain(
             id = domain.id,
@@ -91,7 +90,7 @@ object DataMapper {
 
     fun movieWithGenreEntityToDomain(entity: MovieWithGenreEntity) =
         MovieDomain(
-            id = entity.movie.movieId ,
+            id = entity.movie.movieId,
             isFavorite = entity.movie.isFavorite,
             isAdult = entity.movie.isAdult,
             backdropPath = entity.movie.backdropPath,
@@ -107,22 +106,5 @@ object DataMapper {
             voteAverage = entity.movie.voteAverage,
             voteCount = entity.movie.voteCount
         )
-
-    fun pairOfEntitiesToListMovieDomain(
-        movieList: List<MovieEntity>, genreList: List<GenreEntity>
-    )
-            : List<MovieDomain> {
-        return movieList.map { movie ->
-            genreList.map { genre ->
-                if (genre.movieId == movie.movieId)
-                    genre.id
-                else
-                    0
-            }.let { idList ->
-                movieEntityToDomain(movie, idList)
-            }
-        }
-    }
-
 
 }

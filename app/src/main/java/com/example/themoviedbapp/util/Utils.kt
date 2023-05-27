@@ -17,11 +17,6 @@ object Utils {
         view.setOnClickListener {
             isEnabled = !isEnabled
             view.isEnabled = isEnabled
-
-//            if(isEnabled)
-//                FavoriteCache.addFavoriteId(movie.id)
-//            else
-//                FavoriteCache.removeFavoriteId(movie.id)
         }
     }
 

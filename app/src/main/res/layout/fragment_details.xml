@@ -56,19 +56,35 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_image"
+    <FrameLayout
+        android:id="@+id/fl_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:focusable="true"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/h_gl_fragment_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        app:srcCompat="@drawable/baseline_broken"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <ImageView
+            android:id="@+id/image_pulse_animation"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/load_item"
+            android:layout_gravity="center"
+            android:contentDescription="@null" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/baseline_broken"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </FrameLayout>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/h_gl_fragment_details"
@@ -91,7 +107,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
+        app:layout_constraintTop_toBottomOf="@+id/fl_image"
         tools:text="Title of Movie" />
 
     <androidx.appcompat.widget.AppCompatTextView

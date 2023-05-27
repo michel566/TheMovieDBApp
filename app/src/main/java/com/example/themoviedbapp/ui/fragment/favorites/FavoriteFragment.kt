@@ -12,13 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.core.model.MovieDomain
-import com.example.core.model.entities.GenreEntity
-import com.example.core.model.entities.MovieEntity
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentFavoriteBinding
 import com.example.themoviedbapp.ui.fragment.favorites.viewmodel.FavoriteViewModel
 import com.example.themoviedbapp.ui.fragment.popular.adapter.FavoriteAdapter
-import com.example.themoviedbapp.util.DataMapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,8 +24,6 @@ class FavoriteFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteBinding
     private val viewModel: FavoriteViewModel by viewModels()
-
-    private var list: List<MovieDomain>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,38 +38,46 @@ class FavoriteFragment : Fragment() {
         loadFavoriteMovies()
     }
 
-    private fun loadFavoriteMovies() {
-        viewModel.getAllFavorites().observeForever { listEntity ->
-            list = listEntity.map { DataMapper.movieWithGenreEntityToDomain(it) }
-            initAdapter(list)
-            showAdapter()
+    fun loadFavoriteMovies() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle
+                .repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.getAllFavorites(
+                        onSuccess = { data ->
+                            showError(false, null)
+                            initAdapter(data)
+                        },
+                        onEmptyList = {
+                            showError(true, getString(R.string.error_message_no_favorites))
+                            initAdapter(listOf())
+                        },
+                        onError = {}
+                    )
+                }
         }
-        showAdapter()
 
     }
 
-    private fun initAdapter(list: List<MovieDomain>?) {
-        val favoriteAdapter = FavoriteAdapter(::goToDetails, ::saveFavorite, ::removeFavorite)
-        with(binding.recyclerView){
+    private fun reload() = loadFavoriteMovies()
+
+    private fun initAdapter(list: List<MovieDomain>) {
+        val favoriteAdapter = FavoriteAdapter(::saveFavorite, ::removeFavorite)
+        with(binding.recyclerView) {
             scrollToPosition(0)
             layoutManager = GridLayoutManager(requireContext(), 2)
             setHasFixedSize(true)
             adapter = favoriteAdapter
         }
-        favoriteAdapter.updateList(list)
+        favoriteAdapter.submitList(list)
     }
 
-    private fun showAdapter() {
-        binding.errorLayout.isVisible = (list.isNullOrEmpty())
-        if (list.isNullOrEmpty()) {
-            binding.errorLayout.setText(getString(R.string.error_message_no_favorites))
+    private fun showError(show: Boolean, textError: String?) {
+        with(binding.errorLayout) {
+            isVisible = show
+
+            if (show)
+                setText(textError)
         }
-    }
-
-    private fun goToDetails(movie: MovieDomain) {
-        val data = arrayOf(movie.fullPosterPath, movie.overview)
-        //todo: criar e redirecionar o data para tela de detalhes
-//        findNavController().navigate(MainFragmentDirections.actionMainFragmentToDownloadFragment(data))
     }
 
     private fun saveFavorite(movieDetail: MovieDomain) {
@@ -82,6 +85,7 @@ class FavoriteFragment : Fragment() {
             viewLifecycleOwner.lifecycle
                 .repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.saveFavorite(movieDetail)
+                    reload()
                 }
         }
     }
@@ -90,13 +94,12 @@ class FavoriteFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle
                 .repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    movieDetail.genreIds.let { list ->
-                        movieDetail.id.let { id ->
-                            viewModel.deleteFavoriteById(
-                                id, list
-                            )
-                        }
+                    movieDetail.id.let { id ->
+                        viewModel.deleteFavoriteById(
+                            id
+                        )
                     }
+                    reload()
                 }
         }
     }

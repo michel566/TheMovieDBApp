@@ -1,35 +1,44 @@
 package com.example.themoviedbapp.ui.fragment.popular.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.example.core.model.MovieDomain
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteViewHolder
 
 class FavoriteAdapter(
-    private val openDetailCallback: (movie: MovieDomain) -> Unit,
     private val saveFavoriteCallback: (movie: MovieDomain) -> Unit,
     private val removeFavoriteCallback: (movie: MovieDomain) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
-
-    private lateinit var mList: List<MovieDomain>
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return FavoriteViewHolder.create(parent, openDetailCallback, saveFavoriteCallback, removeFavoriteCallback)
+) :
+    ListAdapter<MovieDomain, FavoriteViewHolder>(diffCallback) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
+        return FavoriteViewHolder.create(
+            parent,
+            saveFavoriteCallback,
+            removeFavoriteCallback
+        )
     }
 
-    override fun getItemCount() = if (mList.isEmpty()) 0 else mList.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mList[position]
-        if (holder is FavoriteViewHolder)
-            holder.bind(item)
+    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
+        val current = getItem(position)
+        holder.bind(current)
     }
 
-    fun updateList(list: List<MovieDomain>?) {
-        list?.let {
-            mList = it
-            notifyDataSetChanged()
+    companion object {
+        private val diffCallback = object : DiffUtil.ItemCallback<MovieDomain>() {
+            override fun areItemsTheSame(
+                oldItem: MovieDomain,
+                newItem: MovieDomain
+            ): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: MovieDomain,
+                newItem: MovieDomain
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
         }
     }
 

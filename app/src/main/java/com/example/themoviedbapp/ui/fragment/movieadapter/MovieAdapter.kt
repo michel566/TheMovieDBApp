@@ -4,8 +4,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.core.model.MovieDomain
-import com.example.themoviedbapp.ui.fragment.favorites.FavoriteViewHolder
-import com.example.themoviedbapp.ui.fragment.main.Option
 import com.example.themoviedbapp.ui.fragment.popular.PopularViewHolder
 
 class MovieAdapter(
