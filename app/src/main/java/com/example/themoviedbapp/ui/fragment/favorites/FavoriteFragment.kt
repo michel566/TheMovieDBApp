@@ -55,7 +55,26 @@ class FavoriteFragment : Fragment() {
                     )
                 }
         }
+    }
 
+    fun textChanged(newText: CharSequence) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle
+                .repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.filterFavorites(
+                        onSuccess = { data ->
+                            showError(false, null)
+                            initAdapter(data)
+                        },
+                        onEmptyList = {
+                            showError(true, getString(R.string.error_message_no_favorites))
+                            initAdapter(listOf())
+                        },
+                        onError = {},
+                        char = newText
+                    )
+                }
+        }
     }
 
     private fun reload() = loadFavoriteMovies()

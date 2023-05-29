@@ -51,10 +51,6 @@ class PopularFragment : Fragment() {
         fetchMovies()
     }
 
-    fun textChanged(newText: String?) {
-
-    }
-
     private fun initAdapter() {
         movieAdapter = MovieAdapter(::detail)
         val linearLayoutManager = LinearLayoutManager(requireContext())

@@ -16,12 +16,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.themoviedbapp.R
 import com.example.themoviedbapp.databinding.FragmentMainBinding
-import com.example.themoviedbapp.framework.cache.KeyCacheConstants
 import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NEED_REFRESH
 import com.example.themoviedbapp.framework.cache.KeyCacheConstants.PREFS_NIGHT_MODE
 import com.example.themoviedbapp.framework.cache.TMDBAppCache
 import com.example.themoviedbapp.framework.model.MovieDetailDomain
-import com.example.themoviedbapp.ui.activity.MainActivity
 import com.example.themoviedbapp.ui.fragment.favorites.FavoriteFragment
 import com.example.themoviedbapp.ui.fragment.pageradapter.ViewPagerAdapter
 import com.example.themoviedbapp.ui.fragment.popular.PopularFragment
@@ -136,14 +134,14 @@ class MainFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    popularFragment.textChanged(newText)
+                    favoriteFragment.textChanged(newText?.lowercase().toString())
                     return false
                 }
             }
         )
 
-        ivPopular.setOnClickListener {
-            goToPopulars()
+        ivFavorites.setOnClickListener {
+            goToFavorites()
         }
     }
 
@@ -157,19 +155,20 @@ class MainFragment : Fragment() {
 
     private fun goToPopulars() = with(binding) {
         option = Option.POPULAR
-        ivSearch.isVisible = true
-        ivPopular.isVisible = false
+        ivSearch.isVisible = false
+        svPopular.isVisible = false
+        ivFavorites.isVisible = true
         container.currentItem = option.ordinal
     }
 
     private fun goToFavorites() = with(binding) {
         option = Option.FAVORITE
-        ivSearch.isVisible = false
+        ivSearch.isVisible = true
         svPopular.isVisible = false
-        ivPopular.isVisible = true
+        ivFavorites.isVisible = false
         container.currentItem = option.ordinal
         val isReload = TMDBAppCache.get<Boolean>(PREFS_NEED_REFRESH)
-        if (isReload){
+        if (isReload) {
             favoriteFragment.loadFavoriteMovies()
             TMDBAppCache.update(PREFS_NEED_REFRESH, false)
         }
