@@ -5,5 +5,5 @@ object HeaderConstants {
     const val TYPE_REQUEST_FILE = "application/json"
     const val NAME_TOKEN_FILE = "Authorization"
 
-    fun concatToken (token: String) = "Bearer $token"
+    fun concatToken(token: String) = "Bearer $token"
 }

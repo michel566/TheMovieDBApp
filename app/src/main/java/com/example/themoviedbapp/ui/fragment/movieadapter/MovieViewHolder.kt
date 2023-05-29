@@ -1,41 +1,23 @@
 package com.example.themoviedbapp.ui.fragment.movieadapter
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.viewbinding.ViewBinding
 import com.example.core.model.MovieDomain
-import com.example.themoviedbapp.R
-import com.example.themoviedbapp.databinding.ItemMovieBinding
+import com.example.themoviedbapp.util.Utils
 
-class MovieViewHolder(
-    itemBinding: ItemMovieBinding,
-    private val movieCallback: (movie: MovieDomain) -> Unit
+abstract class MovieViewHolder(
+    itemBinding: ViewBinding,
+    private val movieCallback: ((movie: MovieDomain) -> Unit)?
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
-    private val image = itemBinding.image
-    private val name = itemBinding.name
-
-    fun bind(movie: MovieDomain){
-        Glide.with(itemView.context)
-            .load(movie.posterPath.original)
-            .centerCrop()
-            .fallback(R.drawable.baseline_broken)
-            .into(image)
-
-        name.text = movie.title
-
+    open fun bind(movie: MovieDomain) {
         itemView.setOnClickListener {
-            movieCallback.invoke(movie)
+            movieCallback?.invoke(movie)
         }
     }
 
-    companion object{
-        fun create(parent: ViewGroup,
-                   movieCallback: (movie: MovieDomain) -> Unit): MovieViewHolder{
-            val inflater = LayoutInflater.from(parent.context)
-            val itemBinding = ItemMovieBinding.inflate(inflater, parent, false)
-            return MovieViewHolder(itemBinding, movieCallback)
-        }
-    }
+    fun setupImage(imagePath: String?, view: ImageView) =
+        Utils.setupResourceImage(itemView.context, view, imagePath)
+
 }

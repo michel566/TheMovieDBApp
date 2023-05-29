@@ -1,16 +1,15 @@
-package com.example.themoviedbapp.framework.network.repository
+package com.example.themoviedbapp.framework.repository
 
 import androidx.paging.PagingSource
 import com.example.core.data.PopularRepository
 import com.example.core.data.RemoteDataSource
 import com.example.core.model.MovieDomain
-import com.example.themoviedbapp.framework.network.paging.PopularPagingSource
 import com.example.themoviedbapp.framework.network.response.DataWrapperResponse
+import com.example.themoviedbapp.framework.paging.PopularPagingSource
 import javax.inject.Inject
 
 class PopularRepositoryImpl
-
- @Inject constructor(
+@Inject constructor(
     private val remoteDataSource: RemoteDataSource<DataWrapperResponse>
 ) : PopularRepository {
 

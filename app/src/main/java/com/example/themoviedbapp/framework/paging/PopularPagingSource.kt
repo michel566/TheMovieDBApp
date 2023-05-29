@@ -1,4 +1,4 @@
-package com.example.themoviedbapp.framework.network.paging
+package com.example.themoviedbapp.framework.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -9,7 +9,7 @@ import com.example.themoviedbapp.framework.network.response.toMovieDomain
 
 class PopularPagingSource(
     private val dataSource: RemoteDataSource<DataWrapperResponse>
-    ) : PagingSource<Int, MovieDomain>() {
+) : PagingSource<Int, MovieDomain>() {
 
     override fun getRefreshKey(state: PagingState<Int, MovieDomain>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -20,21 +20,26 @@ class PopularPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDomain> {
         return try {
-            val nextPage = params.key ?: PAGE_INDEX
-            val popularResponse = dataSource.fetchPopular(
-                language = LANGUAGE, page = nextPage)
+            val position = params.key ?: PAGE_INDEX
+            val popularResponse = dataSource.fetchPopular(page = position)
+
             LoadResult.Page(
-                data = popularResponse.results.map { it.toMovieDomain() },
+                data = getData(popularResponse),
                 prevKey = null,
-                nextKey = if (popularResponse.page >= nextPage) nextPage + PAGE_INDEX else null
+                nextKey = if (popularResponse.page >= position) position + PAGE_INDEX else null
             )
-        } catch (e: Exception){
+
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
 
+    private fun getData(rawData: DataWrapperResponse) =
+        rawData.results.map {
+            it.toMovieDomain()
+        }
+
     companion object {
         private const val PAGE_INDEX = 1
-        private const val LANGUAGE = "en-US"
     }
 }
